@@ -118,13 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="UserManual" xml:space="preserve">
-    <value>Version {0}
-Freeware
+    <value>SilentCMD [BatchFile [BatchArguments]] [Options]
 
-SilentCMD [&lt;BatchFilePath&gt; [&lt;BatchFileArguments&gt;]] [/LOG:&lt;LogFilePath&gt;]
+Options:
+/LOG:file :: output status to LOG file (overwrite existing log).
+/LOG+:file :: output status to LOG file (append to existing log).
+/DELAY:seconds :: delay the execution of batch file by x seconds
 
-Default settings can be specified in SilentCMD.exe.config.
-For more information see "http://www.stephan-brenner.com".</value>
+Examples
+SilentCMD c:\DoSomething.bat
+SilentCMD c:\MyBatch.cmd MyParam1 /LOG:c:\MyLog.txt
+SilentCMD c:\MyBatch.cmd /LOG+:c:\MyLog.txt
+SilentCMD c:\MyBatch.cmd /DELAY:3600 /LOG+:c:\MyLog.txt
+
+Version {0}
+Free software under MIT license
+More information on https://www.stephan-brenner.com</value>
   </data>
   <data name="ProgramTitle" xml:space="preserve">
     <value>SilentCMD</value>

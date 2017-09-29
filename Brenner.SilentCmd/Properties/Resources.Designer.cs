@@ -19,7 +19,7 @@ namespace Brenner.SilentCmd.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -97,13 +97,22 @@ namespace Brenner.SilentCmd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version {0}
-        ///Freeware
+        ///   Looks up a localized string similar to SilentCMD [BatchFile [BatchArguments]] [Options]
         ///
-        ///SilentCMD [&lt;BatchFilePath&gt; [&lt;BatchFileArguments&gt;]] [/LOG:&lt;LogFilePath&gt;]
+        ///Options:
+        ////LOG:file :: output status to LOG file (overwrite existing log).
+        ////LOG+:file :: output status to LOG file (append to existing log).
+        ////DELAY:seconds :: delay the execution of batch file by x seconds
         ///
-        ///Default settings can be specified in SilentCMD.exe.config.
-        ///For more information see &quot;http://www.stephan-brenner.com&quot;..
+        ///Examples
+        ///SilentCMD c:\DoSomething.bat
+        ///SilentCMD c:\MyBatch.cmd MyParam1 /LOG:c:\MyLog.txt
+        ///SilentCMD c:\MyBatch.cmd /LOG+:c:\MyLog.txt
+        ///SilentCMD c:\MyBatch.cmd /DELAY:3600 /LOG+:c:\MyLog.txt
+        ///
+        ///Version {0}
+        ///Free software under MIT license
+        ///More i [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UserManual {
             get {

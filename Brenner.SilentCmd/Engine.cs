@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 using Brenner.SilentCmd.Properties;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Brenner.SilentCmd
 {
     internal class Engine
     {
-        private string _batchFilePath = Settings.Default.DefaultBatchFilePath;
-        private string _batchFileArguments = Settings.Default.DefaultBatchFileArguments;
-        private string _logFilePath = Settings.Default.DefaultLogFilePath;
-        private bool _logAppend = Settings.Default.DefaultLogAppend;
+        private Configuration _config = new Configuration();
         private readonly LogWriter _logWriter = new LogWriter();
         
         /// <summary>
@@ -26,28 +21,29 @@ namespace Brenner.SilentCmd
         {
             try
             {
-                ParseArguments(args);
+                _config.ParseArguments(args);
+                _logWriter.Initialize(_config.LogFilePath, _config.LogAppend);
 
-                if (string.IsNullOrEmpty(_batchFilePath))
+                if (string.IsNullOrEmpty(_config.BatchFilePath))
                 {
                     ShowHelp();
                     return 0;
                 }
 
+                DelayIfNecessary();
                 ResolveBatchFilePath();
 
-                _logWriter.Initialize(_logFilePath, _logAppend);
-                _logWriter.WriteLine(Resources.StartingCommand, _batchFilePath);
+                _logWriter.WriteLine(Resources.StartingCommand, _config.BatchFilePath);
 
                 using (var process = new Process())
                 {
-                    process.StartInfo = new ProcessStartInfo(_batchFilePath, _batchFileArguments)
-                                            {
-                                                RedirectStandardOutput = true,
-                                                RedirectStandardError = true,
-                                                UseShellExecute = false,   // CreateNoWindow only works, if shell is not used
-                                                CreateNoWindow = true
-                                            };
+                    process.StartInfo = new ProcessStartInfo(_config.BatchFilePath, _config.BatchFileArguments)
+                    {
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,   // CreateNoWindow only works, if shell is not used
+                        CreateNoWindow = true
+                    };
                     process.OutputDataReceived += OutputHandler;
                     process.ErrorDataReceived += OutputHandler;
                     process.Start();
@@ -63,9 +59,17 @@ namespace Brenner.SilentCmd
             }
             finally
             {
-                _logWriter.WriteLine(Resources.FinishedCommand, _batchFilePath);
+                _logWriter.WriteLine(Resources.FinishedCommand, _config.BatchFilePath);
                 _logWriter.Dispose();                
             }
+        }
+
+        private void DelayIfNecessary()
+        {
+            if (_config.Delay <= TimeSpan.FromSeconds(0)) return;
+
+            _logWriter.WriteLine("Delaying execution by {0} seconds", _config.Delay.TotalSeconds);
+            Thread.Sleep(_config.Delay);
         }
 
         private static void ShowHelp()
@@ -78,18 +82,18 @@ namespace Brenner.SilentCmd
 
         private void ResolveBatchFilePath()
         {
-            if (string.IsNullOrEmpty(_batchFilePath)) return;
+            if (string.IsNullOrEmpty(_config.BatchFilePath)) return;
 
-            if (!string.IsNullOrEmpty(Path.GetDirectoryName(_batchFilePath))) return;
+            if (!string.IsNullOrEmpty(Path.GetDirectoryName(_config.BatchFilePath))) return;
 
-            if (string.IsNullOrEmpty(Path.GetExtension(_batchFilePath)))
+            if (string.IsNullOrEmpty(Path.GetExtension(_config.BatchFilePath)))
             {
-                if (FindPath(_batchFilePath + ".bat")) return;
-                FindPath(_batchFilePath + ".cmd");
+                if (FindPath(_config.BatchFilePath + ".bat")) return;
+                FindPath(_config.BatchFilePath + ".cmd");
             }
             else
             {
-                FindPath(_batchFilePath);
+                FindPath(_config.BatchFilePath);
             }
         }
 
@@ -108,7 +112,7 @@ namespace Brenner.SilentCmd
 
             if (!string.IsNullOrEmpty(fullPath))
             {
-                _batchFilePath = fullPath;
+                _config.BatchFilePath = fullPath;
                 return true;
             }
 
@@ -118,49 +122,6 @@ namespace Brenner.SilentCmd
         private void OutputHandler(object sender, DataReceivedEventArgs e)
         {
             _logWriter.WriteLine(e.Data);
-        }
-
-        private void ParseArguments(IEnumerable<string> args)
-        {
-            var argumentsBuilder = new StringBuilder();
-            var batchFilePathWasRead = false;
-
-            foreach (string arg in args)
-            {
-                if (arg.StartsWith("/LOG:", true, CultureInfo.InvariantCulture))
-                {
-                    _logAppend = false;
-                    _logFilePath = arg.Substring(5).Trim('"');
-                    continue;
-                }
-
-                if (arg.StartsWith("/LOG+:", true, CultureInfo.InvariantCulture))
-                {
-                    _logAppend = true;
-                    _logFilePath = arg.Substring(6).Trim('"');
-                    continue;
-                }
-
-                if (!batchFilePathWasRead)
-                {
-                    _batchFilePath = arg;
-                    batchFilePathWasRead = true;
-                    continue;
-                }
-
-                if (arg.Contains(" "))
-                {
-                    argumentsBuilder.AppendFormat("\"{0}\" ", arg);
-                    continue;
-                }
-
-                argumentsBuilder.AppendFormat("{0} ", arg);
-            }
-
-            if (argumentsBuilder.Length > 0)
-            {
-                _batchFileArguments = argumentsBuilder.ToString();
-            }
         }
     }
 }

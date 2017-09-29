@@ -17,10 +17,12 @@ namespace Brenner.SilentCmd
         {
             try
             {
-                if (!string.IsNullOrEmpty(logPath))
-                {
-                    _writer = new StreamWriter(logPath, append);
-                }
+                string checkedPath = string.IsNullOrEmpty(logPath)
+                    ? @"%temp%\SilentCMD.log"
+                    : logPath;
+
+                string fullPath = Environment.ExpandEnvironmentVariables(checkedPath);
+                _writer = new StreamWriter(fullPath, append);
             }
             catch (Exception e)
             {
