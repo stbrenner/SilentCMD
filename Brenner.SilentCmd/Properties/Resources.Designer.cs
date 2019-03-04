@@ -100,9 +100,10 @@ namespace Brenner.SilentCmd.Properties {
         ///   Looks up a localized string similar to SilentCMD [BatchFile [BatchArguments]] [Options]
         ///
         ///Options:
-        ////LOG:file :: output status to LOG file (overwrite existing log).
-        ////LOG+:file :: output status to LOG file (append to existing log).
-        ////DELAY:seconds :: delay the execution of batch file by x seconds
+        ////? :: Show help
+        ////LOG:file :: Output status to LOG file (overwrite existing log).
+        ////LOG+:file :: Output status to LOG file (append to existing log).
+        ////DELAY:seconds :: Delay the execution of batch file by x seconds
         ///
         ///Examples
         ///SilentCMD c:\DoSomething.bat
@@ -111,8 +112,7 @@ namespace Brenner.SilentCmd.Properties {
         ///SilentCMD c:\MyBatch.cmd /DELAY:3600 /LOG+:c:\MyLog.txt
         ///
         ///Version {0}
-        ///Free software under MIT license
-        ///More i [rest of string was truncated]&quot;;.
+        ///Free software under MI [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UserManual {
             get {

@@ -24,7 +24,7 @@ namespace Brenner.SilentCmd
                 _config.ParseArguments(args);
                 _logWriter.Initialize(_config.LogFilePath, _config.LogAppend);
 
-                if (string.IsNullOrEmpty(_config.BatchFilePath))
+                if (_config.ShowHelp)
                 {
                     ShowHelp();
                     return 0;

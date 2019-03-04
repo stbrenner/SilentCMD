@@ -6,3 +6,4 @@ Release
 *.DotSettings
 *.user
 *.suo
+packages
