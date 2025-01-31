@@ -19,18 +19,18 @@ namespace Brenner.SilentCmd
         {
             try
             {
-                string checkedPath = string.IsNullOrEmpty(logPath)
-                    ? @"%temp%\SilentCMD.log"
-                    : logPath;
-
-                string fullPath = Environment.ExpandEnvironmentVariables(checkedPath);
-
                 if (_writer != null)
                 {
                     _writer.Dispose();
                 }
 
-                _writer = new StreamWriter(fullPath, append);
+                if (!string.IsNullOrEmpty(logPath))
+                {
+
+                    string fullPath = Environment.ExpandEnvironmentVariables(logPath);
+
+                    _writer = new StreamWriter(fullPath, append);
+                }
             }
             catch (Exception e)
             {
@@ -58,13 +58,11 @@ namespace Brenner.SilentCmd
         {
             try
             {
-                if (_writer == null)
+                if (_writer != null)
                 {
-                    Initialize();
+                    string message = string.Format(format, args);
+                    _writer.WriteLine("{0} - {1}", DateTime.Now, message);
                 }
-
-                string message = string.Format(format, args);
-                _writer.WriteLine("{0} - {1}", DateTime.Now, message);
             }
             catch (Exception e)
             {
