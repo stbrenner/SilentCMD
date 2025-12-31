@@ -117,9 +117,9 @@ namespace Brenner.SilentCmd.Properties {
         ///
         ///Examples
         ///SilentCMD c:\DoSomething.bat
-        ///SilentCMD c:\MyBatch.cmd MyParam1 /LOG:c:\MyLog.txt
-        ///SilentCMD c:\MyBatch.cmd /LOG+:c:\MyLog.txt
-        ///SilentCMD c:\MyBatch.cmd /D [rest of string was truncated]&quot;;.
+        ///SilentCMD /LOG:c:\MyLog.txt c:\MyBatch.cmd MyParam1
+        ///SilentCMD /LOG+:c:\MyLog.txt /LOGSIZE:1000000 c:\MyBatch.cmd
+        ///SilentCMD  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UserManual {
             get {
