@@ -10,13 +10,14 @@ SilentCMD executes a batch file without opening the command prompt window. If r
 
 ### Command Line Syntax
 ```
-SilentCMD [BatchFile [BatchArguments]] [Options]
+SilentCMD [Options] BatchFile [BatchArguments]
 
 Options:
 
    /? :: Show help
    /LOG:file :: Output status to LOG file (overwrite existing log)
    /LOG+:file :: Output status to LOG file (append to existing log)
+   /LOGSIZE:bytes :: Maximum log file size after which it is truncated
    /DELAY:seconds :: Delay the execution of batch file by x seconds
 ```
 
@@ -24,9 +25,9 @@ Options:
 
 ```
 SilentCMD c:\DoSomething.bat
-SilentCMD c:\MyBatch.cmd MyParam1 /LOG:c:\MyLog.txt
-SilentCMD c:\MyBatch.cmd /LOG+:c:\MyLog.txt
-SilentCMD c:\MyBatch.cmd /DELAY:3600 /LOG+:c:\MyLog.txt
+SilentCMD /LOG:c:\MyLog.txt c:\MyBatch.cmd MyParam1
+SilentCMD /LOG+:c:\MyLog.txt /LOGSIZE:1000000 c:\MyBatch.cmd
+SilentCMD /DELAY:3600 c:\MyBatch.cmd
 ```
 
 ### Use Cases

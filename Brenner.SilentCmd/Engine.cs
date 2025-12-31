@@ -33,8 +33,6 @@ namespace Brenner.SilentCmd
                 DelayIfNecessary();
                 ResolveBatchFilePath();
 
-                _logWriter.WriteLine(Resources.StartingCommand, _config.BatchFilePath);
-
                 using (var process = new Process())
                 {
                     process.StartInfo = new ProcessStartInfo(_config.BatchFilePath, _config.BatchFileArguments)
@@ -48,7 +46,7 @@ namespace Brenner.SilentCmd
                     process.OutputDataReceived += OutputHandler;
                     process.ErrorDataReceived += OutputHandler;
                     process.Start();
-                    _logWriter.WriteLine("Process ID = {0}", process.Id);
+                    _logWriter.WriteLine(Resources.StartingCommand, _config.BatchFilePath, process.Id);
 
                     process.BeginOutputReadLine();
                     process.WaitForExit();
@@ -71,7 +69,7 @@ namespace Brenner.SilentCmd
         {
             if (_config.Delay <= TimeSpan.FromSeconds(0)) return;
 
-            _logWriter.WriteLine("Delaying execution by {0} seconds", _config.Delay.TotalSeconds);
+            _logWriter.WriteLine(Resources.Delay, _config.Delay.TotalSeconds);
             Thread.Sleep(_config.Delay);
         }
 

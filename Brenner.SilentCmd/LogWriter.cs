@@ -6,7 +6,10 @@ namespace Brenner.SilentCmd
 {
     internal class LogWriter : IDisposable
     {
+        private string _fullPath;
         private StreamWriter _writer;
+        private long _maxSize;
+        private bool _append;
 
         public bool Initialized { get { return _writer != null; } }
 
@@ -19,20 +22,14 @@ namespace Brenner.SilentCmd
         {
             try
             {
-                if (_writer != null)
-                {
-                    _writer.Dispose();
-                }
-
                 if (string.IsNullOrEmpty(logPath)) return;   // No logging if no path specified
-                string fullPath = Environment.ExpandEnvironmentVariables(logPath);
+                _fullPath = Environment.ExpandEnvironmentVariables(logPath);
 
-                if (append)
-                {
-                    RotateLogFile(fullPath, maxSize);
-                }
-                    
-                _writer = new StreamWriter(fullPath, append);
+                _append = append;
+                _maxSize = maxSize;
+
+                if (_writer != null) _writer.Dispose();
+                _writer = new StreamWriter(_fullPath, _append);
             }
             catch (Exception e)
             {
@@ -40,17 +37,18 @@ namespace Brenner.SilentCmd
             }            
         }
 
-        private void RotateLogFile(string fullPath, long maxSize)
+        private void RotateLogFile()
         {
-            if (maxSize <= 0) return;   // Ignore if no max size specified
-
             try
             {
-                FileInfo fileInfo = new FileInfo(fullPath);
-                if (fileInfo.Exists && fileInfo.Length > maxSize)
+                if (_maxSize <= 0) return;   // Ignore if no max size specified
+
+                if (_writer != null && _writer.BaseStream != null && _writer.BaseStream.Length > _maxSize)
                 {
-                    fileInfo.CopyTo(fullPath + ".old", true);
-                    fileInfo.Delete();
+                    _writer.Dispose();
+                    File.Copy(_fullPath, _fullPath + ".old", true);
+                    File.Delete(_fullPath);
+                    _writer = new StreamWriter(_fullPath, _append);
                 }
             }
             catch (Exception e)
@@ -79,10 +77,13 @@ namespace Brenner.SilentCmd
         {
             try
             {
+                RotateLogFile();
+
                 if (_writer != null && format != null)
                 {
                     string message = string.Format(format, args);
-                    _writer.WriteLine("{0} - {1}", DateTime.Now, message);
+                    string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    _writer.WriteLine("{0} - {1}", timestamp, message);
                 }
             }
             catch (Exception e)

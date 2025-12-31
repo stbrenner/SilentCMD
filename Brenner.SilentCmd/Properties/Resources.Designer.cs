@@ -61,6 +61,15 @@ namespace Brenner.SilentCmd.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delaying execution by {0} seconds.
+        /// </summary>
+        internal static string Delay {
+            get {
+                return ResourceManager.GetString("Delay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error: {0}.
         /// </summary>
         internal static string Error {
@@ -88,7 +97,7 @@ namespace Brenner.SilentCmd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Starting &quot;{0}&quot;.
+        ///   Looks up a localized string similar to Started &quot;{0}&quot; (PID {1}).
         /// </summary>
         internal static string StartingCommand {
             get {
@@ -97,20 +106,20 @@ namespace Brenner.SilentCmd.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SilentCMD [BatchFile [BatchArguments]] [Options]
+        ///   Looks up a localized string similar to SilentCMD [Options] BatchFile [BatchArguments]
         ///
         ///Options:
         ////? :: Show help
         ////LOG:file :: Output status to log file (overwrite existing log).
         ////LOG+:file :: Output status to log file (append to existing log).
-        ////LOGSIZE:bytes :: Maximum log file size after which it is cut
+        ////LOGSIZE:bytes :: Maximum log file size after which it is truncated
         ////DELAY:seconds :: Delay the execution of batch file by x seconds
         ///
         ///Examples
         ///SilentCMD c:\DoSomething.bat
         ///SilentCMD c:\MyBatch.cmd MyParam1 /LOG:c:\MyLog.txt
         ///SilentCMD c:\MyBatch.cmd /LOG+:c:\MyLog.txt
-        ///SilentCMD c:\MyBatch.cmd /DELAY [rest of string was truncated]&quot;;.
+        ///SilentCMD c:\MyBatch.cmd /D [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UserManual {
             get {
