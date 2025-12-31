@@ -3,8 +3,8 @@
 SilentCMD executes a batch file without opening the command prompt window. If required, the console output can be redirected to a log file.
 
 <table>
-<tr><td>Download:</td><td><a href="https://github.com/ymx/SilentCMD/releases/download/v1.4/SilentCMD.zip"><strong>SilentCMD_1.4.zip</strong></a> (7 KB)</td></tr>
-<tr><td>Operating System:</td><td>Windows 7 or newer</td></tr>
+<tr><td>Download:</td><td><a href="https://github.com/ymx/SilentCMD/releases/download/v1.5/SilentCMD-1.5.zip"><strong>SilentCMD-1.5.zip</strong></a> (7 KB)</td></tr>
+<tr><td>Operating System:</td><td>Windows 10 or newer</td></tr>
 <tr><td>License:</td><td><a href="/LICENSE?raw=true">MIT</a></td></tr>
 </table>
 
