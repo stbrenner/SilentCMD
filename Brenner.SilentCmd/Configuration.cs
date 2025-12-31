@@ -10,6 +10,7 @@ namespace Brenner.SilentCmd
     {
         public bool LogAppend { get; private set; }
         public string LogFilePath { get; private set; }
+        public long MaxLogSize { get; private set; }
         public string BatchFilePath { get; set; }
         public string BatchFileArguments { get; private set; }
         public TimeSpan Delay { get; private set; }
@@ -19,6 +20,7 @@ namespace Brenner.SilentCmd
         {
             LogAppend = Settings.Default.DefaultLogAppend;
             LogFilePath = Settings.Default.DefaultLogFilePath;
+            MaxLogSize = Settings.Default.DefaultLogSize;
             BatchFilePath = Settings.Default.DefaultBatchFilePath;
             BatchFileArguments = Settings.Default.DefaultBatchFileArguments;
             Delay = Settings.Default.DefaultDelay;
@@ -43,6 +45,12 @@ namespace Brenner.SilentCmd
                 {
                     LogAppend = false;
                     LogFilePath = argValue;
+                    continue;
+                }
+
+                if (ArgumentParser.TryGetValue(arg, "/LOGSIZE", out argValue))
+                {
+                    MaxLogSize = Convert.ToInt64(argValue);
                     continue;
                 }
 

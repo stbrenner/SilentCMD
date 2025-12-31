@@ -15,27 +15,48 @@ namespace Brenner.SilentCmd
         /// </summary>
         /// <param name="logPath">Path to the destination log file.</param>
         /// <param name="append">True if entrie should be added to an existing log file</param>
-        public void Initialize(string logPath = null, bool append = false)
+        public void Initialize(string logPath = null, bool append = false, long maxSize = 0)
         {
             try
             {
-                string checkedPath = string.IsNullOrEmpty(logPath)
-                    ? @"%temp%\SilentCMD.log"
-                    : logPath;
-
-                string fullPath = Environment.ExpandEnvironmentVariables(checkedPath);
-
                 if (_writer != null)
                 {
                     _writer.Dispose();
                 }
 
+                if (string.IsNullOrEmpty(logPath)) return;   // No logging if no path specified
+                string fullPath = Environment.ExpandEnvironmentVariables(logPath);
+
+                if (append)
+                {
+                    RotateLogFile(fullPath, maxSize);
+                }
+                    
                 _writer = new StreamWriter(fullPath, append);
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e);
             }            
+        }
+
+        private void RotateLogFile(string fullPath, long maxSize)
+        {
+            if (maxSize <= 0) return;   // Ignore if no max size specified
+
+            try
+            {
+                FileInfo fileInfo = new FileInfo(fullPath);
+                if (fileInfo.Exists && fileInfo.Length > maxSize)
+                {
+                    fileInfo.CopyTo(fullPath + ".old", true);
+                    fileInfo.Delete();
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e);
+            }
         }
 
         public void Dispose()
@@ -58,13 +79,11 @@ namespace Brenner.SilentCmd
         {
             try
             {
-                if (_writer == null)
+                if (_writer != null && format != null)
                 {
-                    Initialize();
+                    string message = string.Format(format, args);
+                    _writer.WriteLine("{0} - {1}", DateTime.Now, message);
                 }
-
-                string message = string.Format(format, args);
-                _writer.WriteLine("{0} - {1}", DateTime.Now, message);
             }
             catch (Exception e)
             {

@@ -22,7 +22,7 @@ namespace Brenner.SilentCmd
             try
             {
                 _config.ParseArguments(args);
-                _logWriter.Initialize(_config.LogFilePath, _config.LogAppend);
+                _logWriter.Initialize(_config.LogFilePath, _config.LogAppend, _config.MaxLogSize);
 
                 if (_config.ShowHelp)
                 {
@@ -44,9 +44,12 @@ namespace Brenner.SilentCmd
                         UseShellExecute = false,   // CreateNoWindow only works, if shell is not used
                         CreateNoWindow = true
                     };
+
                     process.OutputDataReceived += OutputHandler;
                     process.ErrorDataReceived += OutputHandler;
                     process.Start();
+                    _logWriter.WriteLine("Process ID = {0}", process.Id);
+
                     process.BeginOutputReadLine();
                     process.WaitForExit();
                     return process.ExitCode;

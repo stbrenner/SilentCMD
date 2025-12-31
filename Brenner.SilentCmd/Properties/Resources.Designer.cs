@@ -19,7 +19,7 @@ namespace Brenner.SilentCmd.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -101,18 +101,16 @@ namespace Brenner.SilentCmd.Properties {
         ///
         ///Options:
         ////? :: Show help
-        ////LOG:file :: Output status to LOG file (overwrite existing log).
-        ////LOG+:file :: Output status to LOG file (append to existing log).
+        ////LOG:file :: Output status to log file (overwrite existing log).
+        ////LOG+:file :: Output status to log file (append to existing log).
+        ////LOGSIZE:bytes :: Maximum log file size after which it is cut
         ////DELAY:seconds :: Delay the execution of batch file by x seconds
         ///
         ///Examples
         ///SilentCMD c:\DoSomething.bat
         ///SilentCMD c:\MyBatch.cmd MyParam1 /LOG:c:\MyLog.txt
         ///SilentCMD c:\MyBatch.cmd /LOG+:c:\MyLog.txt
-        ///SilentCMD c:\MyBatch.cmd /DELAY:3600 /LOG+:c:\MyLog.txt
-        ///
-        ///Version {0}
-        ///Free software under MI [rest of string was truncated]&quot;;.
+        ///SilentCMD c:\MyBatch.cmd /DELAY [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UserManual {
             get {
